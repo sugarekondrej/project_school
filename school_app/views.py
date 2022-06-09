@@ -7,16 +7,26 @@ import json
 from school_app import models
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import model_to_dict
+@csrf_exempt
+def print_teachers(request):
+    if request.method =="GET":
+        teachers = list(models.Teachers.objects.values())
+        return JsonResponse(teachers,safe = False,status=200)
+    elif request.method =="POST":
+        teacher_bytes = request.body
+        new_teacher_body=json.loads(teacher_bytes)
+        new_teacher = models.Teachers(**new_teacher_body)
+        new_teacher.save()
+        return JsonResponse(new_teacher_body,status=200)
 
-def hello_world(request):
-    return HttpResponse("Hello world")
+
 
 @csrf_exempt  
 def print_subjectst(request):
     if request.method == "GET":
         subjects = list(models.Subject.objects.values())
         return JsonResponse(subjects, safe=False, status=200)
-      
+    
     elif request.method == "POST":
         subject=request.body
         subject_dist = json.loads(subject)
