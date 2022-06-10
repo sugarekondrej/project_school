@@ -1,3 +1,4 @@
+from hashlib import new
 from pyexpat import model
 from urllib import request
 from django.forms import model_to_dict
@@ -18,7 +19,20 @@ def print_teachers(request):
         new_teacher = models.Teachers(**new_teacher_body)
         new_teacher.save()
         return JsonResponse(new_teacher_body,status=200)
-
+@csrf_exempt  
+def teachers_details(request,pk):
+    teacher = (models.Teachers.objects.get(pk=pk))
+    if request.method == "GET":
+        return JsonResponse(model_to_dict(teacher))
+    elif request.method == "PUT":
+        put_body_bytes = request.body
+        new_translate = json.loads(put_body_bytes)
+        teacher.__dict__.update(new_translate)
+        teacher.save()
+        return JsonResponse(new_translate, status = 200)
+    elif request.method == "DELETE":
+        teacher.delete()
+        return HttpResponse("Succesfully deleted")
 
 
 @csrf_exempt  
@@ -36,7 +50,6 @@ def print_subjectst(request):
 # podle indexu v IRL        
 @csrf_exempt
 def subject_detail(request,pk):
-    global subjects
     try:
         subject = models.Subject.objects.get(pk=pk)
     except ObjectDoesNotExist:
