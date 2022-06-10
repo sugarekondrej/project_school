@@ -8,6 +8,21 @@ import json
 from school_app import models
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import model_to_dict
+
+
+
+from school_app import serializers
+from rest_framework import viewsets
+
+class BookViewsets(viewsets.ModelViewSet):
+    serializer_class = serializers.BookSerializers
+    queryset = models.Book.objects.all()
+
+
+
+
+
+
 @csrf_exempt
 def print_teachers(request):
     if request.method =="GET":
@@ -67,3 +82,4 @@ def subject_detail(request,pk):
     elif request.method =="DELETE":
         subject.delete()
         return HttpResponse("No content")
+
