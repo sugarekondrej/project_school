@@ -19,7 +19,9 @@ class BookViewsets(viewsets.ModelViewSet):
     queryset = models.Book.objects.all()
 
 
-
+class StudentViewsets(viewsets.ModelViewSet):
+    serializer_class= serializers.StudentSerializer
+    queryset=models.Student.objects.all()
 
 
 
